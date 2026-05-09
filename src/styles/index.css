@@ -1,0 +1,47 @@
+/* ── Google Fonts ──────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@import "tailwindcss";
+
+/* ── Design tokens ─────────────────────────────────────────────────────── */
+:root {
+  --color-gold:      #d97706;
+  --color-gold-lite: #fbbf24;
+  --color-surface:   #0c0a09;
+  --font-body:       'Inter', system-ui, sans-serif;
+  --font-serif:      'IM Fell English', Georgia, serif;
+}
+
+/* ── Base reset ────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-surface);
+  color: #e7e5e4;
+  font-family: var(--font-body);
+  min-height: 100dvh;
+}
+
+#root {
+  isolation: isolate;
+}
+
+/* ── Thin scrollbar ─────────────────────────────────────────────────────── */
+.scrollbar-thin::-webkit-scrollbar { height: 4px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thumb-stone-700::-webkit-scrollbar-thumb {
+  background: #44403c;
+  border-radius: 9999px;
+}
+
+/* ── Serif utility ──────────────────────────────────────────────────────── */
+.font-serif { font-family: var(--font-serif); }
+
+/* ── Selection colour ───────────────────────────────────────────────────── */
+::selection { background: rgba(217,119,6,0.35); color: #fff; }
