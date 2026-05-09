@@ -10,10 +10,13 @@
  * @param {Array} tileDefinitions - TILE_DEFINITIONS array
  * @returns {Array} flat array of tile instance objects
  */
+import GAME_CONFIG from '../constants/gameConfig';
+
 export function buildDeck(tileDefinitions) {
   let counter = 0;
+  const copiesCount = GAME_CONFIG.shortDeck ? 1 : undefined;
   return tileDefinitions.flatMap((def) =>
-    Array.from({ length: def.count }, () => ({
+    Array.from({ length: copiesCount ?? def.count }, () => ({
       instanceId: `${def.id}_${counter++}`,
       id: def.id,
     }))

@@ -31,6 +31,13 @@ const GAME_CONFIG = {
 
   /** Delta applied to a non-number tile's dynamic value per win/loss. */
   nonNumberValueDelta: 1,
+
+  /**
+   * Short Deck Mode (reduces tile count from 4 per type to 1 per type).
+   * Set this to `true` to quickly test draw depletions, reshuffles, and game over.
+   * Set this to `false` for a standard full 136-tile Mahjong deck.
+   */
+  shortDeck: true,
 };
 
 export default GAME_CONFIG;
