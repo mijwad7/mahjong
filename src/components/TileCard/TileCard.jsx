@@ -53,16 +53,16 @@ export default function TileCard({
 
   // ── Sizing presets ───────────────────────────────────────────────────────
   const sizeClasses = {
-    sm: 'w-14 h-20 text-xl',
-    md: 'w-24 h-32 text-4xl',
-    lg: 'w-28 h-40 text-5xl',
-  }[size] ?? 'w-24 h-32 text-4xl';
+    sm: 'w-10 h-14 text-base sm:w-14 sm:h-20 sm:text-xl',
+    md: 'w-16 h-24 text-2xl sm:w-24 sm:h-32 sm:text-4xl',
+    lg: 'w-20 h-28 text-3xl sm:w-28 sm:h-40 sm:text-5xl',
+  }[size] ?? 'w-16 h-24 text-2xl sm:w-24 sm:h-32 sm:text-4xl';
 
   const cornerTextClasses = {
-    sm: 'text-[8px]',
-    md: 'text-[10px]',
-    lg: 'text-xs',
-  }[size] ?? 'text-[10px]';
+    sm: 'text-[6px] sm:text-[8px]',
+    md: 'text-[8px] sm:text-[10px]',
+    lg: 'text-[9px] sm:text-xs',
+  }[size] ?? 'text-[8px] sm:text-[10px]';
 
   if (!def) return null;
 
@@ -137,8 +137,8 @@ export default function TileCard({
       </span>
 
       {/* Suit label beneath for non-number tiles */}
-      {def.category !== TILE_CATEGORY.NUMBER && (
-        <span className={`${symbolColor} text-[8px] tracking-widest uppercase mt-1 opacity-70`}>
+      {def.category !== TILE_CATEGORY.NUMBER && size !== 'sm' && (
+        <span className={`${symbolColor} text-[6px] sm:text-[8px] tracking-widest uppercase mt-0.5 sm:mt-1 opacity-70`}>
           {def.category}
         </span>
       )}

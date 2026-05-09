@@ -53,32 +53,50 @@ export default function GamePage() {
       className="min-h-screen bg-stone-950 text-stone-100 flex flex-col"
     >
       {/* ── Top Bar ─────────────────────────────────────────────────────── */}
-      <header className="flex items-center justify-between px-6 py-3 border-b border-stone-800/60 bg-stone-950/80 backdrop-blur sticky top-0 z-30">
-        <div className="flex items-center gap-6">
-          <span className="text-xl font-bold tracking-widest text-amber-400 font-serif">
-            EMPEROR'S TABLE
-          </span>
-          <div>
-            <div className="text-[10px] uppercase tracking-widest text-stone-500">Current Score</div>
-            <motion.div key={score} variants={numberFlash} initial="initial" animate="animate"
-              className="text-xl font-bold tabular-nums text-amber-400">
-              {score.toLocaleString()}
-            </motion.div>
+      <header className="flex flex-col md:flex-row items-center md:justify-between px-4 py-3 md:px-6 md:py-3 border-b border-stone-800/60 bg-stone-950/80 backdrop-blur sticky top-0 z-30 gap-3 md:gap-4 w-full">
+        {/* Row 1 for Mobile / Left side for Desktop */}
+        <div className="flex items-center justify-between w-full md:w-auto gap-4 md:gap-6">
+          <div className="flex items-center gap-3 sm:gap-6">
+            <span className="text-base sm:text-lg md:text-xl font-bold tracking-widest text-amber-400 font-serif whitespace-nowrap">
+              EMPEROR'S TABLE
+            </span>
+            <div className="border-l border-stone-800 pl-3 sm:pl-6">
+              <div className="text-[9px] sm:text-[10px] uppercase tracking-widest text-stone-500 whitespace-nowrap">Score</div>
+              <motion.div key={score} variants={numberFlash} initial="initial" animate="animate"
+                className="text-base sm:text-lg md:text-xl font-bold tabular-nums text-amber-400">
+                {score.toLocaleString()}
+              </motion.div>
+            </div>
           </div>
+
+          {/* Exit button stays on the top right on mobile */}
+          <button
+            onClick={goToLanding}
+            className="
+              md:hidden px-3 py-1 rounded-lg border border-stone-700 text-stone-400
+              hover:border-rose-500/40 hover:text-rose-400 transition-all text-xs
+            "
+            aria-label="Exit to landing page"
+          >
+            ← Exit
+          </button>
         </div>
 
-        <div className="flex items-center gap-3">
-          <PileCounter label="Draw Pile" count={drawPileCount} icon="🀫" />
-          <PileCounter label="Discards"  count={discardPileCount} icon="🗑️" />
-          <div className="text-[10px] text-stone-500 text-right">
-            <div>Shuffles</div>
-            <div className="text-stone-300 font-bold">{reshuffleCount}/{GAME_CONFIG.maxReshuffles}</div>
+        {/* Row 2 for Mobile / Right side for Desktop */}
+        <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-3 border-t border-stone-800/30 md:border-t-0 pt-2.5 md:pt-0">
+          <div className="flex items-center gap-2 sm:gap-3 w-full justify-between md:justify-end">
+            <PileCounter label="Draw" count={drawPileCount} icon="🀫" />
+            <PileCounter label="Discards" count={discardPileCount} icon="🗑️" />
+            <div className="text-[9px] sm:text-[10px] text-stone-500 text-right min-w-[55px]">
+              <div>Shuffles</div>
+              <div className="text-stone-300 font-bold">{reshuffleCount}/{GAME_CONFIG.maxReshuffles}</div>
+            </div>
           </div>
           <button
             onClick={goToLanding}
             className="
-              ml-2 px-4 py-1.5 rounded-lg border border-stone-700 text-stone-400
-              hover:border-rose-500/40 hover:text-rose-400 transition-all text-sm
+              hidden md:block px-4 py-1.5 rounded-lg border border-stone-700 text-stone-400
+              hover:border-rose-500/40 hover:text-rose-400 transition-all text-sm flex-shrink-0
             "
             aria-label="Exit to landing page"
           >
@@ -119,7 +137,7 @@ export default function GamePage() {
 
         {/* Tile hand display */}
         <motion.div
-          className="flex gap-4 items-center"
+          className="flex gap-2 sm:gap-4 items-center justify-center w-full max-w-full overflow-hidden"
           variants={staggerContainer}
           initial="initial"
           animate="animate"
@@ -137,7 +155,7 @@ export default function GamePage() {
           </AnimatePresence>
 
           {/* Next tile placeholder */}
-          <div className="w-28 h-40 rounded-xl border-2 border-dashed border-stone-700/60 flex items-center justify-center text-stone-600 text-xs uppercase tracking-widest">
+          <div className="w-20 h-28 sm:w-28 sm:h-40 rounded-xl border-2 border-dashed border-stone-700/60 flex items-center justify-center text-stone-600 text-[10px] sm:text-xs uppercase tracking-widest flex-shrink-0">
             Next
           </div>
         </motion.div>
@@ -223,7 +241,7 @@ function BetButton({ onClick, label, subLabel, icon, variant }) {
       whileHover={{ scale: 1.04, boxShadow: isGold ? '0 0 24px rgba(217,119,6,0.4)' : '0 0 24px rgba(255,255,255,0.06)' }}
       whileTap={{ scale: 0.96 }}
       className={`
-        flex-1 flex flex-col items-center py-5 px-4 rounded-2xl
+        flex-1 flex flex-col items-center py-3 px-2 sm:py-5 sm:px-4 rounded-2xl
         font-bold tracking-widest uppercase transition-colors
         ${isGold
           ? 'bg-amber-500 hover:bg-amber-400 text-stone-950'
@@ -232,9 +250,9 @@ function BetButton({ onClick, label, subLabel, icon, variant }) {
       `}
       aria-label={label}
     >
-      <span className="text-2xl mb-1">{icon}</span>
-      <span className="text-sm font-black">{label}</span>
-      <span className={`text-[10px] mt-0.5 tracking-widest font-normal ${isGold ? 'text-stone-800/70' : 'text-stone-500'}`}>
+      <span className="text-xl sm:text-2xl mb-0.5 sm:mb-1">{icon}</span>
+      <span className="text-xs sm:text-sm font-black whitespace-nowrap">{label}</span>
+      <span className={`text-[8px] sm:text-[10px] mt-0.5 tracking-widest font-normal whitespace-nowrap ${isGold ? 'text-stone-800/70' : 'text-stone-500'}`}>
         {subLabel}
       </span>
     </motion.button>

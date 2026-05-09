@@ -101,7 +101,7 @@ export default function GameOverPage() {
       </motion.div>
 
       {/* ── Actions ──────────────────────────────────────────────────────── */}
-      <motion.div variants={staggerContainer} initial="initial" animate="animate" className="flex gap-3 w-full max-w-md">
+      <motion.div variants={staggerContainer} initial="initial" animate="animate" className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full max-w-md">
         {!submitted ? (
           <motion.button
             variants={fadeUp}
@@ -109,7 +109,7 @@ export default function GameOverPage() {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="
-              flex-1 py-4 rounded-xl font-bold tracking-widest uppercase
+              col-span-2 sm:col-span-1 py-3.5 sm:py-4 rounded-xl font-bold tracking-widest uppercase text-xs sm:text-sm
               bg-amber-500 hover:bg-amber-400 text-stone-950 shadow-lg shadow-amber-500/25
               transition-colors
             "
@@ -117,7 +117,7 @@ export default function GameOverPage() {
             🏆 Submit Score
           </motion.button>
         ) : (
-          <motion.div variants={fadeUp} className="flex-1 py-4 rounded-xl text-center text-emerald-400 font-bold border border-emerald-500/30 bg-emerald-500/10">
+          <motion.div variants={fadeUp} className="col-span-2 sm:col-span-1 py-3.5 sm:py-4 rounded-xl text-center text-emerald-400 font-bold border border-emerald-500/30 bg-emerald-500/10 text-xs sm:text-sm flex items-center justify-center">
             ✓ Score Submitted!
           </motion.div>
         )}
@@ -127,7 +127,7 @@ export default function GameOverPage() {
           onClick={startNewGame}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="flex-1 py-4 rounded-xl font-bold tracking-widest uppercase bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-700 transition-colors"
+          className="col-span-1 py-3.5 sm:py-4 rounded-xl font-bold tracking-widest uppercase text-xs sm:text-sm bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-700 transition-colors"
         >
           ↺ Replay
         </motion.button>
@@ -137,7 +137,7 @@ export default function GameOverPage() {
           onClick={goToLanding}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="flex-1 py-4 rounded-xl font-bold tracking-widest uppercase bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-700 transition-colors"
+          className="col-span-1 py-3.5 sm:py-4 rounded-xl font-bold tracking-widest uppercase text-xs sm:text-sm bg-stone-800 hover:bg-stone-700 text-stone-200 border border-stone-700 transition-colors"
         >
           ⌂ Home
         </motion.button>

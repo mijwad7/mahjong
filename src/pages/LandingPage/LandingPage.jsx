@@ -48,7 +48,7 @@ export default function LandingPage() {
       </header>
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <main className="flex-1 grid lg:grid-cols-2 gap-0 items-center px-8 py-16 max-w-6xl mx-auto w-full">
+      <main className="flex-1 grid lg:grid-cols-2 gap-12 lg:gap-8 items-center px-8 py-16 max-w-6xl mx-auto w-full">
         {/* Left col */}
         <motion.div variants={staggerContainer} initial="initial" animate="animate" className="space-y-8">
           <motion.div variants={fadeUp}>
