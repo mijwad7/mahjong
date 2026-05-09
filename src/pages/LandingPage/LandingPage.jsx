@@ -5,6 +5,7 @@ import { useGame } from '../../hooks/useGame';
 import { syncLeaderboard } from '../../game/state/leaderboardSlice';
 import { pageFade, staggerContainer, fadeUp } from '../../animations/variants';
 import TileCard from '../../components/TileCard/TileCard';
+import Modal from '../../components/Modal/Modal';
 import { TILE_DEFINITIONS } from '../../game/constants/tiles';
 import { buildDeck, shuffle } from '../../game/utils/deckUtils';
 
@@ -18,6 +19,7 @@ export default function LandingPage() {
   const { startNewGame } = useGame();
   const dispatch = useDispatch();
   const entries = useSelector((s) => s.leaderboard.entries);
+  const [showRules, setShowRules] = useState(false);
 
   // Sync leaderboard from localStorage whenever landing page mounts
   useEffect(() => { dispatch(syncLeaderboard()); }, [dispatch]);
@@ -36,8 +38,12 @@ export default function LandingPage() {
           EMPEROR'S TABLE
         </h1>
         <nav className="flex gap-6 text-sm text-stone-400">
-          <button className="hover:text-amber-400 transition-colors">The Table</button>
-          <button className="hover:text-amber-400 transition-colors">Rules</button>
+          <button
+            onClick={() => setShowRules(true)}
+            className="hover:text-amber-400 transition-colors"
+          >
+            Rules
+          </button>
         </nav>
       </header>
 
@@ -98,7 +104,7 @@ export default function LandingPage() {
       </main>
 
       {/* ── Feature cards ────────────────────────────────────────────────── */}
-      <section className="border-t border-stone-800/60 px-8 py-12">
+      <section id="features-section" className="border-t border-stone-800/60 px-8 py-12">
         <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
           {FEATURES.map((f) => (
             <motion.div
@@ -116,6 +122,73 @@ export default function LandingPage() {
           ))}
         </div>
       </section>
+
+      {/* ── Rules Modal ──────────────────────────────────────────────────── */}
+      <Modal isOpen={showRules} onClose={() => setShowRules(false)}>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between border-b border-stone-800 pb-4">
+            <h3 className="text-xl font-bold font-serif text-amber-400 tracking-wider">
+              📜 Rules of the Emperor's Table
+            </h3>
+            <button
+              onClick={() => setShowRules(false)}
+              className="text-stone-500 hover:text-amber-400 transition-colors text-lg"
+              aria-label="Close rules"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="space-y-4 text-stone-300 text-sm leading-relaxed max-h-[60vh] overflow-y-auto pr-2 no-scrollbar">
+            <div>
+              <h4 className="text-amber-400/90 font-bold uppercase tracking-wider text-xs mb-1">
+                Objective
+              </h4>
+              <p>
+                Predict whether the total value of the next hand will be <strong>HIGHER</strong> or <strong>LOWER</strong> than the current hand.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="text-amber-400/90 font-bold uppercase tracking-wider text-xs mb-1">
+                Tile Values
+              </h4>
+              <ul className="list-disc pl-5 space-y-1">
+                <li><strong>Number Tiles:</strong> Value equals their static face value (1 to 9).</li>
+                <li><strong>Dragons & Winds:</strong> Start at a base value of <strong>5</strong> and scale dynamically based on outcomes.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-amber-400/90 font-bold uppercase tracking-wider text-xs mb-1">
+                Dynamic Scaling
+              </h4>
+              <p>
+                Every time a non-number tile is part of a winning hand prediction, its dynamic value increases by <strong>+1</strong>. If it is part of a losing prediction, it decreases by <strong>-1</strong>.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="text-amber-400/90 font-bold uppercase tracking-wider text-xs mb-1">
+                Game Over Conditions
+              </h4>
+              <ul className="list-disc pl-5 space-y-1 text-red-400/90">
+                <li>Any non-number tile's value reaches <strong>0</strong> or <strong>10</strong>.</li>
+                <li>The draw pile runs out of tiles <strong>3 times</strong> (maximum reshuffles exceeded).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-stone-800 pt-4 flex justify-end">
+            <button
+              onClick={() => setShowRules(false)}
+              className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold tracking-wider text-xs uppercase shadow-md transition-colors"
+            >
+              Understand
+            </button>
+          </div>
+        </div>
+      </Modal>
     </motion.div>
   );
 }
