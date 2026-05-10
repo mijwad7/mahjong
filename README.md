@@ -1,10 +1,12 @@
 # Emperor's Table — Mahjong Hand Betting Game
 
-A production-quality, premium web-based Mahjong Hi-Lo hand betting game.
+A polished web-based Mahjong hand betting game built with React, Redux Toolkit, and Framer Motion.
+
+---
 
 ## Live Demo
 
-> Record your Loom walkthrough URL here after submission.
+https://www.loom.com/share/771a0deb543b449e8f23f6d2c781b8e3
 
 ---
 
@@ -31,94 +33,168 @@ npm run preview
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | React 18 (Vite) |
-| State Management | Redux Toolkit |
-| Animation | Framer Motion |
-| Styling | Tailwind CSS v4 |
-| Persistence | localStorage (leaderboard) |
+| Layer            | Technology                 |
+| ---------------- | -------------------------- |
+| Framework        | React 18 (Vite)            |
+| State Management | Redux Toolkit              |
+| Animation        | Framer Motion              |
+| Styling          | Tailwind CSS v4            |
+| Persistence      | localStorage (leaderboard) |
 
 ---
 
 ## Architecture Overview
 
-```
+```text
 src/
 ├── game/
-│   ├── constants/       # Tile definitions, game config (single source of truth)
-│   ├── engine/          # (reserved) for future pure-logic helpers
-│   ├── models/          # (reserved) for domain model factories
+│   ├── constants/       # Tile definitions and gameplay configuration
+│   ├── engine/          # Reserved for future gameplay engine helpers
+│   ├── models/          # Reserved for domain model factories
 │   ├── state/           # Redux slices: gameSlice, uiSlice, leaderboardSlice
-│   └── utils/           # Pure functions: tileUtils, deckUtils, roundUtils
-├── components/          # Reusable UI: TileCard, Modal, StatBadge, HandHistoryTimeline
-├── pages/               # Page-level components: Landing, Game, GameOver
-├── hooks/               # Custom hooks: useGame, useUI
+│   └── utils/           # Pure gameplay utilities: deckUtils, tileUtils, roundUtils
+├── components/          # Reusable UI components
+├── pages/               # Page-level screens: Landing, Game, GameOver
+├── hooks/               # Custom hooks
 ├── animations/          # Framer Motion variant presets
-├── services/            # External integrations: leaderboardService (localStorage)
-├── styles/              # Global CSS entry
-├── store.js             # Redux store definition
-└── App.jsx              # Phase-based router
+├── services/            # External integrations: leaderboardService
+├── styles/              # Global styling
+├── store.js             # Redux store configuration
+└── App.jsx              # Application routing and game flow
 ```
 
-### Key Design Decisions
+---
 
-1. **Game logic lives exclusively in `gameSlice.js`** — components only dispatch actions and read selectors, so the engine can be tested or swapped independently.
+## Key Design Decisions
 
-2. **`TILE_DEFINITIONS` as the single source of truth** — adding a new tile type means adding one entry to the array; no other file needs to change.
+### 1. Gameplay Logic Separation
 
-3. **`GAME_CONFIG` as the balance sheet** — all tunable numbers (points per win, reshuffle limit, hand size) are in one object. Changing game feel = editing one file.
+Gameplay calculations and round resolution live inside Redux reducers and utility functions rather than UI components. Components primarily dispatch actions and render derived state.
 
-4. **Pure utility functions** — `deckUtils`, `tileUtils`, `roundUtils` are side-effect-free and easily unit-testable without a Redux store.
+This separation makes future rule changes easier to implement without rewriting presentation logic.
 
-5. **Three Redux slices, separated by concern:**
-   - `gameSlice` — engine state (authoritative)
-   - `uiSlice`   — transient display state (modals, animations)
-   - `leaderboardSlice` — persisted scores
+---
 
-6. **Animation variants centralised** in `animations/variants.js` so the motion language is consistent and easy to update globally.
+### 2. Centralised Tile Definitions
+
+All tile metadata is managed through a shared tile definition configuration. Adding a new tile type or modifying existing tiles requires minimal changes across the codebase.
+
+---
+
+### 3. Centralised Gameplay Configuration
+
+Gameplay balancing values such as:
+
+* reshuffle limits
+* hand size
+* scoring values
+* tile scaling boundaries
+
+are managed through a dedicated configuration object to simplify balancing and future iteration.
+
+---
+
+### 4. Pure Utility Functions
+
+Gameplay helper utilities such as:
+
+* deck generation
+* shuffling
+* score calculation
+* hand resolution
+
+are implemented as side-effect-free functions and structured to be easily testable.
+
+---
+
+### 5. State Separation by Concern
+
+Redux state is separated into focused slices:
+
+* `gameSlice` — core gameplay state
+* `uiSlice` — transient UI state and modal handling
+* `leaderboardSlice` — persisted leaderboard state
+
+This keeps gameplay logic isolated from presentation concerns.
+
+---
+
+### 6. Consistent Animation System
+
+Animation variants are centralised through reusable Framer Motion presets so motion behaviour remains consistent throughout the application.
 
 ---
 
 ## Game Rules
 
-- **Tiles dealt per hand:** 3
-- **Number tiles** — value equals face value (1–9)
-- **Wind / Dragon tiles** — start at value 5; +1 per win, −1 per loss (per tile)
-- **Bet Higher / Lower** — predict whether the next hand total is higher or lower
-- **Ties** — no score change, streak resets
-- **Streak multiplier** — correct streak × base points per win
-- **Reshuffles** — when draw pile is empty, fresh deck merges with discards (max 3)
-- **Game Over** — any tile value reaches 0 or 10, OR third reshuffle is exhausted
+* Each hand contains 3 Mahjong tiles
+* Number tiles use their face value (1–9)
+* Dragon and Wind tiles begin at value 5
+* Honor tiles increase by 1 after appearing in a winning hand
+* Honor tiles decrease by 1 after appearing in a losing hand
+* Players bet whether the next hand total will be higher or lower
+* Ties result in no score change
+* The score system includes streak-based multipliers
+* When the draw pile is exhausted, a fresh deck is merged with the discard pile and reshuffled
+* The game ends if:
+
+  * any honor tile reaches 0 or 10
+  * or the draw pile is exhausted for the third time
 
 ---
 
 ## Extensibility Notes
 
-The codebase is designed to be extended during an onsite review:
+The project structure was intentionally designed to support future feature additions and interview extensions.
 
-- **New tile types**: Add entries to `TILE_DEFINITIONS` in `tiles.js`
-- **New game modes**: Add a phase to `GAME_PHASE`, a case in `App.jsx`, and a new page
-- **New bet types**: Add to the `BET` object in `roundUtils.js`; `resolveRound` handles them
-- **Score rules change**: Update `GAME_CONFIG` or `calculateScoreDelta` in `roundUtils.js`
-- **Multiplayer / rooms**: Add a `roomSlice` and a socket service — game engine untouched
-- **Tile animations**: Edit `animations/variants.js` — one source for all motion
+### New Tile Types
+
+Add new entries inside the tile definition configuration.
+
+### New Game Modes
+
+Add a new gameplay phase and corresponding page component.
+
+### New Bet Types
+
+Extend the round resolution utilities and add new action handling logic.
+
+### Balance Adjustments
+
+Modify gameplay configuration values without rewriting engine logic.
+
+### Multiplayer Support
+
+Additional networking layers and room state could be introduced with minimal impact on the existing gameplay engine structure.
+
+### Animation Updates
+
+Motion behaviour can be updated centrally through the animation presets.
+
+---
+
+## Manual Testing
+
+The application was manually tested for:
+
+* dynamic tile scaling edge cases
+* reshuffle sequencing and deck exhaustion
+* rapid input handling
+* long gameplay sessions
+* responsive layout behaviour
+* game-over boundary conditions
+* leaderboard persistence
 
 ---
 
 ## AI Utilisation
 
-This project was built with the assistance of an AI coding assistant (Antigravity). The following was AI-assisted:
+AI-assisted tooling was used during development primarily for:
 
-- Boilerplate scaffolding and repetitive code structure
-- Tile definitions array population
-- Framer Motion variant object setup
-- README drafting
+* scaffolding and repetitive boilerplate generation
+* UI experimentation and iteration
+* animation variant drafting
+* structural refactoring suggestions
+* README drafting assistance
 
-The following was **handwritten / directed by the developer**:
-
-- Overall architecture and folder structure decisions
-- Game engine logic design (`placeBet` reducer, reshuffle flow, scaling system)
-- Component composition and page layout decisions
-- Design aesthetic and Tailwind class choices
-- All state management patterns and separation of concerns decisions
+All gameplay architecture, state flow decisions, game rules implementation, component composition, debugging, testing, and final integration decisions were reviewed, modified, and directed manually during development.

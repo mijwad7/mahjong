@@ -37,7 +37,7 @@ const GAME_CONFIG = {
    * Set this to `true` to quickly test draw depletions, reshuffles, and game over.
    * Set this to `false` for a standard full 136-tile Mahjong deck.
    */
-  shortDeck: true,
+  shortDeck: false,
 };
 
 export default GAME_CONFIG;

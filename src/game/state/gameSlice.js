@@ -99,8 +99,8 @@ const gameSlice = createSlice({
       let { drawPile, discardPile, reshuffleCount } = state;
 
       if (drawPile.length < GAME_CONFIG.handSize) {
-        if (reshuffleCount >= GAME_CONFIG.maxReshuffles) {
-          // Third depletion → game over
+        if (reshuffleCount >= GAME_CONFIG.maxReshuffles - 1) {
+          // Game over triggered exactly on the 3rd depletion
           state.phase = GAME_PHASE.GAME_OVER;
           state.gameOverCause = { type: 'max_reshuffles', reshuffleCount };
           return;
