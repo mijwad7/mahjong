@@ -28,6 +28,17 @@ body {
   min-height: 100dvh;
 }
 
+button,
+a,
+[role="button"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[role="button"]:disabled {
+  cursor: not-allowed;
+}
+
 #root {
   isolation: isolate;
 }
