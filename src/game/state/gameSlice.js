@@ -129,14 +129,19 @@ const gameSlice = createSlice({
       state.winStreak = newStreak;
       state.totalHands += 1;
 
-      // ── 5. Apply tile scaling (only to tiles in the PREVIOUS hand) ──────
-      state.tileScaling = applyTileScalingUpdate(
-        state.currentHand,
-        state.tileScaling,
-        TILE_DEFINITIONS_MAP,
-        isWin,
-        GAME_CONFIG.nonNumberValueDelta
-      );
+      // ── 5. Apply tile scaling (to tiles in the REVEALED hand, if not a tie) ─
+      if (!isTie) {
+        state.tileScaling = applyTileScalingUpdate(
+          nextHand,
+          state.tileScaling,
+          TILE_DEFINITIONS_MAP,
+          isWin,
+          GAME_CONFIG.nonNumberValueDelta
+        );
+      }
+
+      // Recalculate the final value of the revealed hand after it has been scaled
+      const finalNextHandValue = calculateHandValue(nextHand, state.tileScaling, TILE_DEFINITIONS_MAP);
 
       // ── 6. Archive previous hand ────────────────────────────────────────
       const historyEntry = {
@@ -153,7 +158,7 @@ const gameSlice = createSlice({
 
       // ── 7. Advance hand ─────────────────────────────────────────────────
       state.currentHand = nextHand;
-      state.currentHandValue = nextHandValue;
+      state.currentHandValue = finalNextHandValue;
 
       // ── 8. Check game-over conditions ───────────────────────────────────
       if (hasValueBreachedBounds(state.tileScaling, GAME_CONFIG.gameOverValueBounds)) {

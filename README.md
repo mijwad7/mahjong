@@ -108,7 +108,7 @@ The codebase is designed to be extended during an onsite review:
 
 ## AI Utilisation
 
-This project was built with the assistance of an AI coding assistant (Antigravity / Claude). The following was AI-assisted:
+This project was built with the assistance of an AI coding assistant (Antigravity). The following was AI-assisted:
 
 - Boilerplate scaffolding and repetitive code structure
 - Tile definitions array population
