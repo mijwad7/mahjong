@@ -145,6 +145,7 @@ const gameSlice = createSlice({
 
       // ── 6. Archive previous hand ────────────────────────────────────────
       const historyEntry = {
+        id: state.totalHands, // Guaranteed unique incremental ID for React keys
         hand: state.currentHand,
         handValue: state.currentHandValue,
         bet,

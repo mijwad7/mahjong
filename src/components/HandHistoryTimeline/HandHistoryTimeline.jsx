@@ -20,10 +20,10 @@ export default function HandHistoryTimeline({ handHistory, tileScaling }) {
   }
 
   return (
-    <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-stone-700">
+    <div className="flex flex-row-reverse gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-stone-700 justify-start">
       <AnimatePresence mode="popLayout">
-        {handHistory.map((entry, idx) => (
-          <HistoryEntry key={`${entry.hand[0]?.instanceId ?? idx}`} entry={entry} tileScaling={tileScaling} />
+        {handHistory.map((entry) => (
+          <HistoryEntry key={entry.id} entry={entry} tileScaling={tileScaling} />
         ))}
       </AnimatePresence>
     </div>
@@ -44,7 +44,7 @@ function HistoryEntry({ entry }) {
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, x: -20 }}
+      initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0, transition: { duration: 0.35 } }}
       exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.2 } }}
       className={`
